@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class dmCalendarCollectionLayout: UICollectionViewLayout {
+final class dmCalendarCollectionLayout: UICollectionViewLayout {
 	fileprivate enum Constants {
 		static let numberOfDaysInWeek = 7
 		static let numberOfWeeksInMonth = 6
@@ -27,7 +27,7 @@ class dmCalendarCollectionLayout: UICollectionViewLayout {
 		return getContentSize()
 	}
 	
-	override init() {
+	public override init() {
 		super.init()
 	}
 	

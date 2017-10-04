@@ -9,15 +9,15 @@
 import Foundation
 import UIKit
 
-protocol dmCalendarCollectionViewDelegate: class {
+public protocol dmCalendarCollectionViewDelegate: class {
 	func calendarCollectionViewWillLayoutSubview(_ collection: dmCalendarCollectionView)
 }
 
-class dmCalendarCollectionView: UICollectionView {
+public final class dmCalendarCollectionView: UICollectionView {
 	
 	weak var calendarDelegate: dmCalendarCollectionViewDelegate?
 	
-	override func layoutSubviews() {
+	override public func layoutSubviews() {
 		calendarDelegate?.calendarCollectionViewWillLayoutSubview(self)
 		super.layoutSubviews()
 	}

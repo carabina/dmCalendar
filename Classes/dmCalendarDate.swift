@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 
-struct dmCalendarDate {
+public struct dmCalendarDate {
 	let day: Int
 	let month: Int
 	let year: Int
 }
 
-extension dmCalendarDate {
+public extension dmCalendarDate {
 	static func == (lhs: dmCalendarDate, rhs: dmCalendarDate) -> Bool {
 		return lhs.day == rhs.day && lhs.month == rhs.month && lhs.year == rhs.year
 	}

@@ -14,7 +14,7 @@ enum dmCalendarItemSize {
 	case custom(CGFloat)
 }
 
-struct dmCalendarProperties {
+public struct dmCalendarProperties {
 	let calendarSize: CGSize
 	let itemSize: dmCalendarItemSize
 	let headerReferenceSize: CGSize
