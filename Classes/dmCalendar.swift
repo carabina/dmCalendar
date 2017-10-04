@@ -66,7 +66,7 @@ final class dmCalendar: UIView, dmCalendarCollectionViewDelegate, UICollectionVi
 	
 	fileprivate var maxRangeDate: Date?
 	
-	init(focusingOn date: Date, properties: dmCalendarProperties) {
+	public init(focusingOn date: Date, properties: dmCalendarProperties) {
 		self.focusedDate = date
 		self.properties = properties
 		
@@ -159,7 +159,7 @@ final class dmCalendar: UIView, dmCalendarCollectionViewDelegate, UICollectionVi
 		}
 	}
 	
-	func calendarCollectionViewWillLayoutSubview(_ collection: dmCalendarCollectionView) {
+	public func calendarCollectionViewWillLayoutSubview(_ collection: dmCalendarCollectionView) {
 		switch properties.scrollDirection {
 		case .horizontal:
 			if collection.contentOffset.x < 0.0 {
@@ -300,7 +300,7 @@ final class dmCalendar: UIView, dmCalendarCollectionViewDelegate, UICollectionVi
 
 /// Public functions to get date
 extension dmCalendar {
-	final func calendarDateFromDate(_ date: Date) -> dmCalendarDate {
+	public func calendarDateFromDate(_ date: Date) -> dmCalendarDate {
 		let components = gregorian.dateComponents([.year, .month, .day], from: date)
 		
 		guard let day = components.day, let month = components.month, let year = components.year else { fatalError("Gregorian Date Components Error") }
@@ -308,7 +308,7 @@ extension dmCalendar {
 		return dmCalendarDate(day: day, month: month, year: year)
 	}
 	
-	final func dateForIndexPath(_ indexPath: IndexPath) -> Date? {
+	public func dateForIndexPath(_ indexPath: IndexPath) -> Date? {
 		let firstDay = firstDayInSection(indexPath.section)
 		guard let day = gregorian.dateComponents([.weekday], from: firstDay).weekday else { return nil }
 		let weekday = reorderWeekday(day)
@@ -322,13 +322,13 @@ extension dmCalendar {
 		return date
 	}
 	
-	final func dateFromCalendarDate(_ calendarDate: dmCalendarDate) -> Date {
+	public func dateFromCalendarDate(_ calendarDate: dmCalendarDate) -> Date {
 		guard let date = gregorian.date(from: componentsFromCalendarDate(calendarDate)) else { return Date() }
 		
 		return date
 	}
 	
-	final func firstDayInSection(_ section: Int) -> Date {
+	public func firstDayInSection(_ section: Int) -> Date {
 		var components = DateComponents()
 		components.month = section
 		
@@ -337,7 +337,7 @@ extension dmCalendar {
 		return date
 	}
 	
-	final func indexPathForDate(_ date: Date) -> IndexPath? {
+	public func indexPathForDate(_ date: Date) -> IndexPath? {
 		guard let monthSection = sectionForDate(date) else { return nil }
 		let firstDayInMonth = firstDayInSection(monthSection)
 		guard let dayNumber = gregorian.dateComponents([.weekday], from: firstDayInMonth).weekday else { return nil }
@@ -347,7 +347,7 @@ extension dmCalendar {
 		return IndexPath(item: dateItem + weekday, section: monthSection)
 	}
 	
-	final func indexPathsForDates(_ dates: [Date]) -> [IndexPath] {
+	public func indexPathsForDates(_ dates: [Date]) -> [IndexPath] {
 		var indexPaths: [IndexPath] = []
 		
 		for date in dates {
@@ -364,12 +364,12 @@ extension dmCalendar {
 		return indexPaths
 	}
 	
-	final func isDateDesired(using calendarDate: dmCalendarDate) -> Bool {
+	public func isDateDesired(using calendarDate: dmCalendarDate) -> Bool {
 		let mappedDates = desiredDates.map({ self.calendarDateFromDate($0) })
 		return mappedDates.filter({ $0 == calendarDate }).count > 0
 	}
 	
-	final func isCellInMonth(at indexPath: IndexPath) -> Bool {
+	public func isCellInMonth(at indexPath: IndexPath) -> Bool {
 		guard let date = dateForIndexPath(indexPath) else { return false }
 		let calendarDate = calendarDateFromDate(date)
 		let firstDay = firstDayInSection(indexPath.section)
@@ -378,7 +378,7 @@ extension dmCalendar {
 		return calendarDate.year == firstCalendarDay.year && calendarDate.month == firstCalendarDay.month
 	}
 	
-	final func isWithinRange(_ range: Int, from indexPath: IndexPath, to currentIndexPath: IndexPath) -> Bool {
+	public func isWithinRange(_ range: Int, from indexPath: IndexPath, to currentIndexPath: IndexPath) -> Bool {
 		guard
 			let baseDate = dateForIndexPath(indexPath),
 			let currentDate = dateForIndexPath(currentIndexPath),
@@ -389,18 +389,18 @@ extension dmCalendar {
 		return currentDate <= baseFuture && currentDate >= basePast
 	}
 	
-	final func selectIndexPaths(_ indexPaths: [IndexPath]) {
+	public func selectIndexPaths(_ indexPaths: [IndexPath]) {
 		for indexPath in indexPaths {
 			calendarCollection.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
 		}
 	}
 	
-	final func isDateToday(_ calendarDate: dmCalendarDate) -> Bool {
+	public func isDateToday(_ calendarDate: dmCalendarDate) -> Bool {
 		let date = calendarDateFromDate(Date())
 		return date == calendarDate
 	}
 	
-	final func getDateRange(between firstIndexPath: IndexPath, and secondIndexPath: IndexPath) -> (dates: [Date], indexPaths: [IndexPath]) {
+	public func getDateRange(between firstIndexPath: IndexPath, and secondIndexPath: IndexPath) -> (dates: [Date], indexPaths: [IndexPath]) {
 		guard let firstDate = dateForIndexPath(firstIndexPath), let secondDate = dateForIndexPath(secondIndexPath) else { return ([], []) }
 		
 		var date = firstDate
@@ -417,29 +417,29 @@ extension dmCalendar {
 		return (dates, paths)
 	}
 	
-	final func reloadItems(at indexPaths: [IndexPath]) {
+	public func reloadItems(at indexPaths: [IndexPath]) {
 		calendarCollection.reloadItems(at: indexPaths)
 	}
 	
-	final func reloadData() {
+	public func reloadData() {
 		calendarCollection.reloadData()
 	}
 	
-	final func reloadVisibleItems() {
+	public func reloadVisibleItems() {
 		calendarCollection.reloadItems(at: calendarCollection.indexPathsForVisibleItems)
 	}
 	
-	final func isDate(_ date1: Date, inSameDayAs date2: Date) -> Bool {
+	public func isDate(_ date1: Date, inSameDayAs date2: Date) -> Bool {
 		return gregorian.isDate(date1, inSameDayAs: date2)
 	}
 }
 
 extension dmCalendar {
-	final func selectItem(at indexPath: IndexPath, animated: Bool, scrollPosition: UICollectionViewScrollPosition) {
+	public func selectItem(at indexPath: IndexPath, animated: Bool, scrollPosition: UICollectionViewScrollPosition) {
 		calendarCollection.selectItem(at: indexPath, animated: animated, scrollPosition: scrollPosition)
 	}
 	
-	final func deselectItem(at indexPath: IndexPath, animated: Bool) {
+	public func deselectItem(at indexPath: IndexPath, animated: Bool) {
 		calendarCollection.deselectItem(at: indexPath, animated: animated)
 	}
 }
